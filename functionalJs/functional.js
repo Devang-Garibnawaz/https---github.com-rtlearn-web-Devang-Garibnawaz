@@ -1,4 +1,4 @@
-$(document).ready(function() {});
+
 
 function formatDate(value) {
     var dt = new Date(value);
@@ -6,7 +6,6 @@ function formatDate(value) {
 }
 
 function getUserTweet(x) {
-    console.log(x);
     var screen_name = x.getAttribute("id");
     if (screen_name != "") {
         $("#divFollowerTimeLine").html("");
@@ -185,6 +184,25 @@ function getUserTweetBySearch() {
                 );
             }
         );
+    }
+}
+
+function fnGetUserTweets(x){
+    var screen_name = x.getAttribute("id");
+    if (screen_name != ""){
+       
+        const url='http://localhost/twitterchallenge/fetchData.php';
+        var formData = new FormData();
+        formData.append("fetch_tweets","fetch_tweets");
+        formData.append("screen_name",screen_name);
+        fetch(url, {
+            method: 'POST',
+            body: formData, // The data
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8' // The type of data you're sending
+            }
+        }).then(function (response) {
+        });
     }
 }
 

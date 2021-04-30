@@ -52,7 +52,7 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/caraousel.css" />
 </head>
@@ -78,7 +78,9 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
 
         </div>
     </div>
-    <div class="container col-9">
+
+    <div class="container col-11">
+        <div class="card-header">TimeLines</div>
         <div class="carousel">
             <?
             for ($i = 0; $i < sizeof($home_timeline); $i++) {
@@ -114,10 +116,65 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
         </div>
     </div>
 
+    <div class="container col-11">
+        <div class="card-header">TimeLines</div>
+        <div class="carousel" id="divFolloweTimelineNew"></div>
+    </div>
 
+    <div class="container col-9">
+        <div class="row">
+            <div class="card-header">Operations</div>
+            <div class="user-card-body d-flex">
+                <div class="col=3">
+                    <input type="text" list="followers_name_list" placeholder="Search Follower" id="txtfollower_name" name="followers_name" class="form-control">
+                    <datalist id="followers_name_list">
+                        <?php foreach ($myFollowers->users as $Followers) { ?>
+                            <option value="<?php echo $Followers->screen_name; ?>"><?php echo $Followers->name; ?></option>
 
+                        <?php } ?>
+                    </datalist>
+                </div>
+                <div class="col-9 d-flex ml">
+                    <input type="button" id="" name="search_follower" onclick="getUserTweetBySearch()" class="btn btn-primary" value="Show Tweets" />
+                    <button class="btn btn-success" onclick="fnGeneratePDF()">In PDF</button>
+                    <button class="btn btn-secondary">In XML</button>
+                    <button class="btn btn-info">In Google Spread Sheet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container col-9">
+        <div class="row">
+            <div class="card-header">My Followers</div>
+            <?php foreach ($myFollowers->users as $Followers) { ?>
+                <div class="user-card-body">
+                    <div class="user-item">
+                        <div>
+                            <img class="user-image" src="<?php echo $Followers->profile_image_url; ?>" alt="..." class="img-fluid rounded-circle">
+                        </div>
+                        <div class="text">
+                            <a style="color:white;text-decoration:none;" href="javascript:void(0)" id="<?php echo $Followers->screen_name; ?>" onclick="fnGetUserTweets(this)">
+                                <h3 class="h5"><?php echo $Followers->name; ?></h3>
+                            </a>
+                            </a>
+                            <p><?php echo $Followers->description; ?></p>
+                        </div>
+                    </div>
+                </div>
+            <? } ?>
 
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <? $now = new DateTime(); ?>
+            © <? echo $now->format('Y'); ?> Copyright:
+            <a target="_blank" style="color:white;" href="https://devang-garibnawaz.web.app/"> Devang Garibnawaz</a>
+        </div>
+    </footer>
     <script src="functionalJs/app.js"></script>
+    <script src="functionalJs/functional.js"></script>
     </body>
 
 </html>
