@@ -22,24 +22,13 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
     $oauth_token_secret = $_SESSION['oauth_token_secret'];
 
     $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $oauth_token, $oauth_token_secret);
-    if (isset($_GET['screen_name']) && isset($_GET['status'])) {
-        $status = $_GET['status'];
-        $screen_name = $_GET['screen_name'];
-        switch ($status) {
-            case "1":
-                $count = 10;
-                $user_timeline = $connection->get("statuses/user_timeline", ["screen_name" => $screen_name, "count" => $count]);
-                echo json_encode($user_timeline);
-                break;
-            case "2":
-                $user_timeline = $connection->get("statuses/user_timeline", ["screen_name" => $screen_name]);
-                echo json_encode($user_timeline);
-                break;
-            default:
-                break;
-        }
-    } else if (isset($_GET['status'])) {
-        if ($_GET['status'] == "2") {
+    if (isset($_POST['screen_name']) && isset($_POST['count'])) {
+        $count = $_POST['count'];
+        $screen_name = $_POST['screen_name'];
+        $user_timeline = $connection->get("statuses/user_timeline", ["screen_name" => $screen_name, "count" => $count]);
+        echo json_encode($user_timeline);
+    } else if (isset($_POST['status'])) {
+        if ($_POST['status'] == "2") {
             $myFollowers = $connection->get("followers/list");
             echo json_encode($myFollowers);
         }

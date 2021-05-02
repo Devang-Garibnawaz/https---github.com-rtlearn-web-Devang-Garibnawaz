@@ -90,6 +90,9 @@ body {
   background: #17a2b8;
   color: white;
 }
+.btn_show_tweets {
+  flex-direction: row;
+}
 .btn-link {
   background: white;
   color: black;
@@ -279,8 +282,7 @@ body {
 .operations {
   flex-direction: row;
 }
-.download-buttons {
-}
+
 @media (min-width: 1200px) {
   .container .topnav .card .column .row {
     max-width: 1290px;
@@ -443,6 +445,13 @@ body {
     flex-direction: column;
     margin: 20px;
     display: list-item;
+  }
+  .btn_show_tweets {
+    flex-direction: column;
+  }
+  .btn-primary {
+    margin-top: 10px;
+    width: auto;
   }
 }
 

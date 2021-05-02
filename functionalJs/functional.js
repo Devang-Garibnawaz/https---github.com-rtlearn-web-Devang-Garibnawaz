@@ -276,25 +276,22 @@ async function fnGetHomeTimelines() {
 }
 
 async function fnGetUserTweets(x) {
-  if (x == "") {
+  if (x == "" || x == undefined) {
     x = document.getElementById("txtfollower_name").value;
-    if (x == "") {
+    if (x == "" || x == undefined) {
       alert("Please select usser");
       return;
     }
   }
   var screen_name = x;
   if (screen_name != "") {
-    const url =
-      "http://localhost/twitterchallenge/fetchData.php?screen_name=" +
-      screen_name +
-      "&status=1";
+    var formData = new FormData();
+    formData.append("screen_name", screen_name);
+    formData.append("count", 10);
+    const url = "http://localhost/twitterchallenge/fetchData.php";
     const response = await fetch(url, {
-      method: "POST",
-      body: "",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8", // The type of data you're sending
-      },
+      method: "post",
+      body: formData,
     });
 
     if (response.ok) {
@@ -339,7 +336,7 @@ async function fnGetUserTweets(x) {
           text +
           "</p>" +
           "<p>Created At: <b>" +
-          json[i].created_at +
+          formatDate(json[i].created_at) +
           "</b></p>" +
           "</div>" +
           "</div>" +
@@ -414,17 +411,13 @@ async function fnDownload_Tweets() {
     document.getElementById("txtfollower_name").focus();
     return;
   } else {
-    const url =
-      "http://localhost/twitterchallenge/fetchData.php?screen_name=" +
-      screen_name +
-      "&status=2";
-
+    var formData = new FormData();
+    formData.append("screen_name", screen_name);
+    formData.append("count", 10000);
+    const url = "http://localhost/twitterchallenge/fetchData.php";
     const response = await fetch(url, {
       method: "POST",
-      body: "",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8", // The type of data you're sending
-      },
+      body: formData,
     });
     if (response.ok) {
       var obj = [];
@@ -495,13 +488,12 @@ async function fnDownload_Tweets() {
   }
 }
 async function fnDownload_Followers() {
-  const url = "http://localhost/twitterchallenge/fetchData.php?status=2";
+  var formData = new FormData();
+  formData.append("status", 2);
+  const url = "http://localhost/twitterchallenge/fetchData.php";
   const response = await fetch(url, {
     method: "POST",
-    body: '{"status":"2"}',
-    headers: {
-      "Content-type": "application/json; charset=UTF-8", // The type of data you're sending
-    },
+    body: formData,
   });
   if (response.ok) {
     var obj = [];

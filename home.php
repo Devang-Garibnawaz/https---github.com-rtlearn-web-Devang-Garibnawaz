@@ -126,9 +126,9 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
         <div class="row">
             <div class="card-header">Operations</div>
             <div class="user-card-body operations">
-                <div class="col=6 d-flex">
+                <div class="col=6 d-flex btn_show_tweets">
                     <input type="text" list="followers_name_list" placeholder="Search Follower" id="txtfollower_name" name="followers_name" class="form-control">
-                    <input type="button" id="" name="search_follower" onclick="fnGetUserTweets()" class="btn btn-primary ml" value="Show Tweets" />
+                    <input type="button" id="" name="search_follower" onclick="fnGetUserTweets()" class="btn btn-primary" value="Show Tweets" />
                     <datalist id="followers_name_list">
                         <?php foreach ($myFollowers->users as $Followers) { ?>
                             <option value="<?php echo $Followers->screen_name; ?>"><?php echo $Followers->name; ?></option>
