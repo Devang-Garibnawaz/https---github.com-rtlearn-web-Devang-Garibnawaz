@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 include_once('config.php');
@@ -12,21 +11,40 @@ function verify_vars()
     }
     return true;
 }
+
+// print_r($_SESSION);
+
+
 if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
+
+
     $oauth_token = $_SESSION['oauth_token'];
     $oauth_token_secret = $_SESSION['oauth_token_secret'];
 
     $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $oauth_token, $oauth_token_secret);
-    $screen_name = $_POST['screen_name'];
-    echo $screen_name;
-    if (isset($_POST['fetch_tweets'])) {
-        echo $_POST['fetch_tweets'];
-        $myTweets = $connection->get('statuses/user_timeline', array('screen_name' => $screen_name, 'count' => 10));
-        echo json_encode($myTweets);
-    } else if (isset($_POST['fetch_users'])) {
-
-        $q = $_POST['q'];
-        $myTweets = $connection->get('users/search', array('q' => $q, 'count' => 10));
-        echo json_encode($myTweets);
+    if (isset($_GET['screen_name']) && isset($_GET['status'])) {
+        $status = $_GET['status'];
+        $screen_name = $_GET['screen_name'];
+        switch ($status) {
+            case "1":
+                $count = 10;
+                $user_timeline = $connection->get("statuses/user_timeline", ["screen_name" => $screen_name, "count" => $count]);
+                echo json_encode($user_timeline);
+                break;
+            case "2":
+                $user_timeline = $connection->get("statuses/user_timeline", ["screen_name" => $screen_name]);
+                echo json_encode($user_timeline);
+                break;
+            default:
+                break;
+        }
+    } else if (isset($_GET['status'])) {
+        if ($_GET['status'] == "2") {
+            $myFollowers = $connection->get("followers/list");
+            echo json_encode($myFollowers);
+        }
+    } else {
+        $home_timeline = $connection->get("statuses/home_timeline", ["count" => 10]);
+        echo json_encode($home_timeline);
     }
 }

@@ -1,10 +1,11 @@
-let slidePosition = 0;
-const slides = document.getElementsByClassName('carousel__item');
-const totalSlides = slides.length;
+// let slidePosition = 0;
+// const slides = document.getElementsByClassName('carousel__item');
+// const totalSlides = slides.length;
 
 document.
   getElementById('carousel__button--next')
   .addEventListener("click", function() {
+    alert();
     moveToNextSlide();
   });
 document.
