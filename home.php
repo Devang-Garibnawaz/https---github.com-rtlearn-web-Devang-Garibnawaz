@@ -70,7 +70,7 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
             <div class="right-nav">
 
                 <input type="button" onclick="fnGetHomeTimelines()" class="btn btn-tweets" value=" My Tweets" />
-                <a href="logout.php"><input type="button" class="btn btn-logout" value="Logout" /></a>
+                <a style="text-decoration: none;" href="logout.php"><input type="button" class="btn btn-logout" value="Logout" /></a>
             </div>
 
         </div>

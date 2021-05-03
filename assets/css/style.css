@@ -59,7 +59,7 @@ body {
   cursor: pointer;
   display: flex;
   height: 40px;
-  width: auto;
+  width: fit-content;
   justify-content: center;
   align-items: center;
   border-radius: 3px;
@@ -71,6 +71,7 @@ body {
   border: 0;
   background: #007bff;
   color: white;
+  margin-left: 10px;
 }
 .btn-success {
   margin: 10px;
@@ -113,7 +114,17 @@ body {
   border: 1px solid dodgerblue;
   color: dodgerblue;
 }
+.btn-login {
+  justify-content: center;
+  align-content: center;
+  display: flex;
+}
 
+.index-heading {
+  justify-content: center;
+  align-content: center;
+  display: flex;
+}
 .btn-tweets:hover {
   animation: hover-twitter 0.5s;
 }
@@ -297,7 +308,6 @@ body {
   }
   .operations .download-buttons {
     flex-direction: column;
-    margin: 20px;
   }
 }
 
@@ -443,7 +453,6 @@ body {
   }
   .operations .download-buttons {
     flex-direction: column;
-    margin: 20px;
     display: list-item;
   }
   .btn_show_tweets {
@@ -451,7 +460,6 @@ body {
   }
   .btn-primary {
     margin-top: 10px;
-    width: auto;
   }
 }
 
