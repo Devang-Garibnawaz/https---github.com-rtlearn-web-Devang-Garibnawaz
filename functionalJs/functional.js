@@ -221,6 +221,7 @@ async function fnGetHomeTimelines() {
     var activeclass = "";
     var text = "";
     var link = "";
+
     for (var i = 0; i < json.length; i++) {
       text = json[i].text.includes("http")
         ? json[i].text.substr(0, json[i].text.lastIndexOf("http"))
@@ -302,6 +303,28 @@ async function fnGetUserTweets(x) {
       var activeclass = "";
       var text = "";
       var link = "";
+      console.log(json);
+      if (json.length <= 0) {
+        item +=
+          '<div class="carousel__item carousel__item--visible">' +
+          '<div class="card">' +
+          '<div class="card-body-width">' +
+          '<div class="card-body">' +
+          '<h4 class="mr"><b>' +
+          "No Tweets Found" +
+          "</b></h4>" +
+          '<p class="mt">' +
+          "</p>" +
+          "<p><b>" +
+          "</b></p>" +
+          "</div>" +
+          "</div>" +
+          "</div>" +
+          "</div>";
+
+        divTimelines.innerHTML = item;
+        divTimelines.scrollIntoView();
+      }
       for (var i = 0; i < json.length; i++) {
         text = json[i].text.includes("http")
           ? json[i].text.substr(0, json[i].text.lastIndexOf("http"))
@@ -487,6 +510,7 @@ async function fnDownload_Tweets() {
     }
   }
 }
+
 async function fnDownload_Followers() {
   var formData = new FormData();
   formData.append("status", 2);
@@ -572,6 +596,65 @@ function fnShowMyTweets() {
   document.getElementById("divFollowerTimeLine").style.display = "none";
 }
 
-function fnGeneratePDF() {
-  location.href = "generatepdf.php";
+function fnFatchFollowers() {
+  var screen_name = document.getElementById("txtfollower_name").value;
+  var email = document.getElementById("txtEmail").value;
+  if (screen_name == "") {
+    alert("Please select user");
+    document.getElementById("txtfollower_name").focus();
+    return;
+  }
+
+  if (email == "") {
+    alert("Please enter email address!");
+    document.getElementById("txtEmail").focus();
+    return;
+  }
+  var formData = new FormData();
+  formData.append("type", 1);
+  formData.append("screen_name", screen_name);
+  formData.append("email", email);
+  const url = "processrun.php";
+  const response = fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+  alert("The follower list will mail you shortly whenever process is done!");
+}
+
+function fnFetchUserTweets() {
+  var screen_name = document.getElementById("txtfollower_name").value;
+  var email = document.getElementById("txtEmail").value;
+  if (screen_name == "") {
+    alert("Please select user");
+    document.getElementById("txtfollower_name").focus();
+    return;
+  }
+
+  if (email == "") {
+    alert("Please enter email address!");
+    document.getElementById("txtEmail").focus();
+    return;
+  }
+  var formData = new FormData();
+  formData.append("type", 2);
+  formData.append("screen_name", screen_name);
+  formData.append("email", email);
+  const url = "processrun.php";
+  const response = fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+  alert("The follower list will mail you shortly whenever process is done!");
+}
+
+function fnSendMail() {
+  var formData = new FormData();
+  formData.append("type", 2);
+  const url = "http://localhost/twitterchallenge/processrun.php";
+  const response = fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+  console.log("You will get mail soon");
 }

@@ -19,7 +19,7 @@
     <div class="container">
 
         <div class="index-heading">
-            <h2>Your Limit for call Twitter API is exceeded. Please try after 5 minutes!</h2>
+            <h2>Your API is exceeded. Please try after 15 minutes!</h2>
         </div>
         <div class="btn-login">
             <a href="logout.php" style="text-decoration: none;"><input type="button" class="btn btn-logout" value="Back to login" /></a>

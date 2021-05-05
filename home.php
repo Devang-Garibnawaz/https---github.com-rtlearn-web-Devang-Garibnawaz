@@ -128,6 +128,7 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
             <div class="user-card-body operations">
                 <div class="col=6 d-flex btn_show_tweets">
                     <input type="text" list="followers_name_list" placeholder="Search Follower" id="txtfollower_name" name="followers_name" class="form-control">
+                    <input type="email" class="form-control" id="txtEmail" placeholder="Enter Email Address!" />
                     <input type="button" id="" name="search_follower" onclick="fnGetUserTweets()" class="btn btn-primary" value="Show Tweets" />
                     <datalist id="followers_name_list">
                         <?php foreach ($myFollowers->users as $Followers) { ?>
@@ -137,8 +138,8 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
                     </datalist>
                 </div>
                 <div class="col-9 download-buttons">
-                    <button class="btn btn-success" onclick="fnDownload_Followers()">Download Followers</button>
-                    <button class="btn btn-secondary" onclick="fnDownload_Tweets()">Download Tweets</button>
+                    <button class="btn btn-success" onclick="fnFatchFollowers()">Download Followers</button>
+                    <button class="btn btn-secondary" onclick="fnFetchUserTweets()">Download Tweets</button>
                     <a id="donwloadLink" class="downloadElements" href="" download=""></a>
                 </div>
             </div>
