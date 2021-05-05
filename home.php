@@ -49,6 +49,7 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
     <title>Home</title>
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/caraousel.css" />
@@ -75,46 +76,6 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
 
         </div>
     </div>
-
-    <!-- <div class="container col-11" id="divDefaultTimeLine">
-        <div class="card-header">TimeLines</div>
-        <div class="carousel">
-            <?
-            for ($i = 0; $i < sizeof($home_timeline); $i++) {
-                $i == 0 ? $visibleitem = 'carousel__item--visible' : $visibleitem = '';
-
-            ?>
-                <div class="carousel__item <? echo $visibleitem ?>">
-                    <div class="card">
-                        <img src="<? echo $home_timeline[$i]->user->profile_banner_url ?>" class="post" alt="Avatar" style="width:100%">
-                        <div class="card-body-width">
-                            <div class="card-body">
-                                <h4 class="mr"><b><? echo $home_timeline[$i]->user->name ?></b></h4>
-                                <?
-                                if (strpos($home_timeline[$i]->text, "http") !== false) {
-                                    $text = substr($home_timeline[$i]->text, 0, strpos($home_timeline[$i]->text, "http"));
-                                    $link = substr($home_timeline[$i]->text, strpos($home_timeline[$i]->text, "http"), strlen($home_timeline[$i]->text));
-                                } else {
-                                    $text = $home_timeline[$i]->text;
-                                    $link = '';
-                                }
-                                ?>
-                                <p class="mt"><? echo $text ?></p>
-                                <p>Created At: <b><? echo date("d-m-Y h:i:s", strtotime($home_timeline[$i]->created_at)) ?></b></p>
-                                <? if (isset($link)) { ?><a target="_blankl" class="btn btn-link" href="<? echo $link ?>">Read more</a><? } ?>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <? } ?>
-            <div class="carousel__actions">
-                <button id="carousel__button--prev" aria-label="Previous slide"><i class="arrow left"></i></button>
-                <button id="carousel__button--next" aria-label="Next slide"><i class="arrow right"></i></button>
-            </div>
-        </div>
-    </div> -->
-
 
     <div class="container col-11">
         <div class="card-header">TimeLines</div>
@@ -176,7 +137,6 @@ if (verify_vars($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
         </div>
     </footer>
     <script src="functionalJs/functional.js"></script>
-    <!-- <script src="functionalJs/app.js"></script> -->
     </body>
 
 </html>

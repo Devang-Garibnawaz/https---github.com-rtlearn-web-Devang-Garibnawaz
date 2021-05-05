@@ -9,11 +9,9 @@ if (isset($_POST["type"])) {
     switch ($type) {
         case 1:
             $result = shell_exec('php fetchFollowers.php ' . $oauth_token . ',' . $oauth_token_secret . ',' . $email . ',' . $screen_name . '  2>&1');
-            echo json_encode($result);
             break;
         case 2:
             $result = shell_exec('php fetchtweets.php ' . $oauth_token . ',' . $oauth_token_secret . ',' . $email . ',' . $screen_name . '  2>&1');
-            echo json_encode($result);
             break;
     }
 }

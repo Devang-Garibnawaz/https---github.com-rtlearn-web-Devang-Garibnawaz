@@ -29,6 +29,7 @@ if (isset($_GET['request'])) {
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
     <title>Login with Twitter</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
