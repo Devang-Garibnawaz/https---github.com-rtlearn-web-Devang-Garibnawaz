@@ -427,174 +427,168 @@ function moveToPrevSlide() {
   updateSlidePosition();
 }
 
-async function fnDownload_Tweets() {
-  var screen_name = document.getElementById("txtfollower_name").value;
-  if (screen_name == "") {
-    alert("Please select user");
-    document.getElementById("txtfollower_name").focus();
-    return;
-  } else {
-    var formData = new FormData();
-    formData.append("screen_name", screen_name);
-    formData.append("count", 10000);
-    const url = "http://localhost/twitterchallenge/fetchData.php";
-    const response = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    if (response.ok) {
-      var obj = [];
-      let data = await response.json();
-      for (var i = 0; i < data.length; i++) {
-        var item = data[i];
-        var retweeted_item = item.retweeted_status;
+// async function fnDownload_Tweets() {
+//   var screen_name = document.getElementById("txtfollower_name").value;
+//   if (screen_name == "") {
+//     alert("Please select user");
+//     document.getElementById("txtfollower_name").focus();
+//     return;
+//   } else {
+//     var formData = new FormData();
+//     formData.append("screen_name", screen_name);
+//     formData.append("count", 10000);
+//     const url = "http://localhost/twitterchallenge/fetchData.php";
+//     const response = await fetch(url, {
+//       method: "POST",
+//       body: formData,
+//     });
+//     if (response.ok) {
+//       var obj = [];
+//       let data = await response.json();
+//       for (var i = 0; i < data.length; i++) {
+//         var item = data[i];
+//         var retweeted_item = item.retweeted_status;
 
-        var media = [];
-        var urls = [];
+//         var media = [];
+//         var urls = [];
 
-        if (
-          item.extended_entities &&
-          item.extended_entities.media &&
-          item.extended_entities.media.length
-        ) {
-          item.extended_entities.media.forEach(function (item) {
-            if (item.type == "video") {
-              media[media.length] = {
-                type: "video",
-                source: item.video_info.variants[0].url,
-              };
-            } else {
-              media[media.length] = {
-                type: "image",
-                url: item.media_url,
-              };
-            }
-          });
-        } else if (item.entities.media && item.entities.media.length) {
-          item.entities.media.forEach(function (item) {
-            media[media.legnth] = {
-              type: "image",
-              url: item.media_url,
-            };
-          });
-        }
+//         if (
+//           item.extended_entities &&
+//           item.extended_entities.media &&
+//           item.extended_entities.media.length
+//         ) {
+//           item.extended_entities.media.forEach(function (item) {
+//             if (item.type == "video") {
+//               media[media.length] = {
+//                 type: "video",
+//                 source: item.video_info.variants[0].url,
+//               };
+//             } else {
+//               media[media.length] = {
+//                 type: "image",
+//                 url: item.media_url,
+//               };
+//             }
+//           });
+//         } else if (item.entities.media && item.entities.media.length) {
+//           item.entities.media.forEach(function (item) {
+//             media[media.legnth] = {
+//               type: "image",
+//               url: item.media_url,
+//             };
+//           });
+//         }
 
-        if (item.entities.urls && item.entities.urls.length) {
-          item.entities.urls.forEach(function (item) {
-            urls[urls.length] = item.url;
-          });
-        }
-        obj[obj.length] = {
-          retweeted: retweeted_item ? "1" : "0",
-          retweeted_person_name: retweeted_item ? retweeted_item.user.name : "",
-          retweeted_person_screen_name: retweeted_item
-            ? retweeted_item.user.screen_name
-            : "",
-          name: item.user.name,
-          screen_name: item.user.screen_name,
-          original_time: retweeted_item
-            ? formatDate(retweeted_item.created_at)
-            : formatDate(item.created_at),
-          retweeted_time: retweeted_item ? formatDate(item.created_at) : "",
-          text: retweeted_item ? retweeted_item.text : item.text,
-          favorite_count: item.favorite_count,
-          retweet_count: item.retweet_count,
-          place: item.place ? item.place.full_name : "",
-          media: media,
-          links: urls,
-        };
-      }
-      convert_data(1, obj);
-    } else {
-      alert("HTTP-Error: " + response.status);
-    }
-  }
-}
+//         if (item.entities.urls && item.entities.urls.length) {
+//           item.entities.urls.forEach(function (item) {
+//             urls[urls.length] = item.url;
+//           });
+//         }
+//         obj[obj.length] = {
+//           retweeted: retweeted_item ? "1" : "0",
+//           retweeted_person_name: retweeted_item ? retweeted_item.user.name : "",
+//           retweeted_person_screen_name: retweeted_item
+//             ? retweeted_item.user.screen_name
+//             : "",
+//           name: item.user.name,
+//           screen_name: item.user.screen_name,
+//           original_time: retweeted_item
+//             ? formatDate(retweeted_item.created_at)
+//             : formatDate(item.created_at),
+//           retweeted_time: retweeted_item ? formatDate(item.created_at) : "",
+//           text: retweeted_item ? retweeted_item.text : item.text,
+//           favorite_count: item.favorite_count,
+//           retweet_count: item.retweet_count,
+//           place: item.place ? item.place.full_name : "",
+//           media: media,
+//           links: urls,
+//         };
+//       }
+//       convert_data(1, obj);
+//     } else {
+//       alert("HTTP-Error: " + response.status);
+//     }
+//   }
+// }
 
-async function fnDownload_Followers() {
-  var formData = new FormData();
-  formData.append("status", 2);
-  const url = "http://localhost/twitterchallenge/fetchData.php";
-  const response = await fetch(url, {
-    method: "POST",
-    body: formData,
-  });
-  if (response.ok) {
-    var obj = [];
-    var data = await response.json();
-    for (var i = 0; i < data.users.length; i++) {
-      var item = data.users[i];
-      console.log(item);
-      obj[obj.length] = {
-        username: item.name,
-        screen_name: item.screen_name,
-        description: item.description,
-        imageurl: item.profile_image_url,
-        created_at: formatDate(item.created_at),
-      };
-    }
-    convert_data(2, obj);
-  }
-}
+// async function fnDownload_Followers() {
+//   var formData = new FormData();
+//   formData.append("status", 2);
+//   const url = "http://localhost/twitterchallenge/fetchData.php";
+//   const response = await fetch(url, {
+//     method: "POST",
+//     body: formData,
+//   });
+//   if (response.ok) {
+//     var obj = [];
+//     var data = await response.json();
+//     for (var i = 0; i < data.users.length; i++) {
+//       var item = data.users[i];
+//       console.log(item);
+//       obj[obj.length] = {
+//         username: item.name,
+//         screen_name: item.screen_name,
+//         description: item.description,
+//         imageurl: item.profile_image_url,
+//         created_at: formatDate(item.created_at),
+//       };
+//     }
+//     convert_data(2, obj);
+//   }
+// }
 
-function convert_data(type, obj) {
-  var href = "";
-  var filename = "";
-  var extension = "";
-  var no_click = 0;
+// function convert_data(type, obj) {
+//   var href = "";
+//   var filename = "";
+//   var extension = "";
+//   var no_click = 0;
 
-  if (type == 1) {
-    filename = "Tweets";
-  } else {
-    filename = "followers";
-  }
-  var result = "data:text/csv;charset=utf-8,";
-  var keys = Object.keys(obj[0]);
-  result += keys.join(",") + "\n";
+//   if (type == 1) {
+//     filename = "Tweets";
+//   } else {
+//     filename = "followers";
+//   }
+//   var result = "data:text/csv;charset=utf-8,";
+//   var keys = Object.keys(obj[0]);
+//   result += keys.join(",") + "\n";
 
-  obj.forEach(function (item, index) {
-    keys.forEach(function (key, index) {
-      var temp_item = "";
+//   obj.forEach(function (item, index) {
+//     keys.forEach(function (key, index) {
+//       var temp_item = "";
 
-      if (key == "media") {
-        item[key].forEach(function (item, index) {
-          if (item.type == "video") {
-            temp_item += index > 0 ? "\n" + item.source : item.source;
-          } else if (item.type == "image") {
-            temp_item += index > 0 ? "\n" + item.url : item.url;
-          }
-        });
-      } else if (key == "links") {
-        item[key].forEach(function (item, index) {
-          temp_item += index > 0 ? "\n" + item : item;
-        });
-      } else {
-        temp_item += item[key];
-      }
+//       if (key == "media") {
+//         item[key].forEach(function (item, index) {
+//           if (item.type == "video") {
+//             temp_item += index > 0 ? "\n" + item.source : item.source;
+//           } else if (item.type == "image") {
+//             temp_item += index > 0 ? "\n" + item.url : item.url;
+//           }
+//         });
+//       } else if (key == "links") {
+//         item[key].forEach(function (item, index) {
+//           temp_item += index > 0 ? "\n" + item : item;
+//         });
+//       } else {
+//         temp_item += item[key];
+//       }
 
-      temp_item = '"' + temp_item + '"';
-      result += index > 0 ? "," + temp_item : temp_item;
-    });
+//       temp_item = '"' + temp_item + '"';
+//       result += index > 0 ? "," + temp_item : temp_item;
+//     });
 
-    if (index != obj.length - 1) result += "\n";
-  });
+//     if (index != obj.length - 1) result += "\n";
+//   });
 
-  href = encodeURI(result);
-  extension = "csv";
+//   href = encodeURI(result);
+//   extension = "csv";
 
-  if (!no_click) {
-    var temp = document.getElementById("donwloadLink");
-    temp.setAttribute("href", href);
-    temp.setAttribute("download", filename + "." + extension);
-    temp.click();
-  }
-}
-
-function fnShowMyTweets() {
-  $("#divFollowerTimeLine").html("");
-  document.getElementById("divDefaultTimeLine").style.display = "block";
-  document.getElementById("divFollowerTimeLine").style.display = "none";
-}
+//   if (!no_click) {
+//     var temp = document.getElementById("donwloadLink");
+//     temp.setAttribute("href", href);
+//     temp.setAttribute("download", filename + "." + extension);
+//     temp.click();
+//   }
+// }
 
 function fnFatchFollowers() {
   var screen_name = document.getElementById("txtfollower_name").value;
@@ -646,15 +640,4 @@ function fnFetchUserTweets() {
     body: formData,
   });
   alert("The follower list will mail you shortly whenever process is done!");
-}
-
-function fnSendMail() {
-  var formData = new FormData();
-  formData.append("type", 2);
-  const url = "http://localhost/twitterchallenge/processrun.php";
-  const response = fetch(url, {
-    method: "POST",
-    body: formData,
-  });
-  console.log("You will get mail soon");
 }

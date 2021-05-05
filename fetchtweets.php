@@ -28,99 +28,92 @@ if (verify_vars($arg_arr[0], $arg_arr[1])) {
     if (isset($arg_arr[2]) && isset($arg_arr[3])) {
         $email = $arg_arr[2];
         $screen_name = $arg_arr[3];
-        $usert_tweets = [];
+        $users_tweets = [];
         $i = 0;
         $id = 0;
         do {
-            if ($id <= 0) {
-                $result = $connection->get("statuses/user_timeline", ["screen_name" => $screen_name, "count" => 200, 'include_rts' => false]);
-                $id = $result[count($result) - 1]->id;
+            if ($id == 0) {
+                $result = $connection->get("statuses/user_timeline", ["screen_name" => $screen_name, "count" => 200]);
             } else {
-                $result = $connection->get("statuses/user_timeline", ["screen_name" => $screen_name, "count" => 200, 'since_id' => $id, 'include_rts' => false]);
-                $id = $result[count($result) - 1]->id;
+                $result = $connection->get("statuses/user_timeline", ["screen_name" => $screen_name, "count" => 200, 'since_id' => $id]);
             }
-            var_dump($result);
-            $resultArray = (array)$result;
-            if (isset($resultArray["errors"])) {
-                sleep(900);
-            } else {
-                $usert_tweets[$i] = $result;
-                $i++;
-            }
-        } while (count($result) <= 0);
+            $index = sizeof($result) - 1;
+            $users_tweets[$i] = $result;
+            $id = $result[$index]->id;
+        } while (sizeof($result) <= 0);
 
-        print_r($usert_tweets);
-        //generateCSV($screen_name, $myFollowers, $email);
+        generateCSV($screen_name, $users_tweets, $email);
     }
 }
 
-// function generateCSV($screen_name, $myFollowers, $email)
-// {
-//     $file = $screen_name . '_followers.csv';
-//     $list = array(
-//         ['username', 'screen_name', 'description', 'profile_image_url', 'created_at']
-//     );
-//     for ($i = 0; $i < count($myFollowers); $i++) {
-//         for ($j = 0; $j < count($myFollowers[$i]->users); $j++) {
-//             array_push($list, [
-//                 $myFollowers[$i]->users[$j]->name,
-//                 $myFollowers[$i]->users[$j]->screen_name,
-//                 $myFollowers[$i]->users[$j]->description,
-//                 $myFollowers[$i]->users[$j]->profile_image_url,
-//                 date("d-m-Y h:i:s", strtotime($myFollowers[$i]->users[$j]->created_at))
-//             ]);
-//         }
-//     }
-//     $fp = fopen($file, "w");
-//     foreach ($list as $fields) {
-//         fputcsv($fp, $fields);
-//     }
-//     fclose($fp);
-//     sendMailToUser($screen_name, $email);
-// }
+function generateCSV($screen_name, $users_tweets, $email)
+{
+    $file = $screen_name . '_tweets.csv';
+    $list = array(
+        ['tweet_id', 'name', 'text', 'favorite_count', 'retweet_count', 'created_at']
+    );
+    for ($i = 0; $i < count($users_tweets); $i++) {
+        for ($j = 0; $j < count($users_tweets[$i]); $j++) {
+            array_push($list, [
+                $users_tweets[$i][$j]->id_str,
+                $users_tweets[$i][$j]->user->name,
+                $users_tweets[$i][$j]->text,
+                $users_tweets[$i][$j]->favorite_count,
+                $users_tweets[$i][$j]->retweet_count,
+                date("d-m-Y h:i:s", strtotime($users_tweets[$i][$j]->created_at))
+            ]);
+        }
+    }
+    $fp = fopen($file, "w");
+    foreach ($list as $fields) {
+        fputcsv($fp, $fields);
+    }
+    fclose($fp);
+    sendMailToUser($screen_name, $email);
+}
 
-// function sendMailToUser($screen_name, $email)
-// {
+function sendMailToUser($screen_name, $email)
+{
 
-//     require_once "PHPMailer/PHPMailer.php";
-//     require_once "PHPMailer/SMTP.php";
-//     require_once "PHPMailer/Exception.php";
+    require_once "PHPMailer/PHPMailer.php";
+    require_once "PHPMailer/SMTP.php";
+    require_once "PHPMailer/Exception.php";
 
-//     $mail = new PHPMailer;
+    $mail = new PHPMailer;
 
 
-//     $mail->isSMTP();
-//     $mail->Host = "smtp.gmail.com";
-//     $mail->SMTPAuth = true;
-//     $mail->Username = "devangjariwala25@gmail.com";
-//     $mail->Password = "Devang@4128";
-//     $mail->Port = 587;
-//     $mail->SMTPSecure = "tls";
-//     $mail->setFrom('devangjariwala25@gmail.com', 'Devang Garibnawaz');
-//     $mail->addAddress($email);
+    $mail->isSMTP();
+    $mail->Host = "smtp.gmail.com";
+    $mail->SMTPAuth = true;
+    $mail->Username = "devangjariwala25@gmail.com";
+    $mail->Password = "Devang@4128";
+    $mail->Port = 587;
+    $mail->SMTPSecure = "tls";
+    $mail->setFrom('devangjariwala25@gmail.com', 'Devang Garibnawaz');
+    $mail->addAddress($email);
 
-//     //Provide file path and name of the attachments
-//     $file = $screen_name . "_followers.csv";
-//     $mail->addAttachment($file, $file);
+    //Provide file path and name of the attachments
+    $file = $screen_name . "_tweets.csv";
+    $mail->addAttachment($file, $file);
 
-//     $mail->isHTML(true);
-//     $mail->Subject = "Followers list of " . $screen_name;
-//     $mail->Body = "<i>Check following attachment of follower list</i>";
-//     $mail->AltBody = "This is the plain text version of the email content";
+    $mail->isHTML(true);
+    $mail->Subject = "Followers list of " . $screen_name;
+    $mail->Body = "<i>Check following attachment of follower list</i>";
+    $mail->AltBody = "This is the plain text version of the email content";
 
-//     try {
-//         if (!$mail->send()) {
-//             $status = "failed";
-//             $response = "Error" . $mail->ErrorInfo;
-//         } else {
-//             $status = "success";
-//             $response = "Email Sent";
-//         }
-//     } catch (Exception $e) {
-//         $status = "failed";
-//         $response = "Error! " . $mail->ErrorInfo;
-//     }
+    try {
+        if (!$mail->send()) {
+            $status = "failed";
+            $response = "Error" . $mail->ErrorInfo;
+        } else {
+            $status = "success";
+            $response = "Email Sent";
+        }
+    } catch (Exception $e) {
+        $status = "failed";
+        $response = "Error! " . $mail->ErrorInfo;
+    }
 
-//     unlink($file);
-//     echo json_encode(array("status" => $status, "response" => $response));
-// }
+    unlink($file);
+    echo json_encode(array("status" => $status, "response" => $response));
+}
