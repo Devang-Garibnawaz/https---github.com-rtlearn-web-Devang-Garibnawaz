@@ -80,8 +80,8 @@ function sendMailToUser($screen_name, $email)
     require_once "PHPMailer/SMTP.php";
     require_once "PHPMailer/Exception.php";
 
-    $fromEmail = "trackerincco@gmail.com";
-    $fromName = "Devang Garibnawaz";
+    $fromEmail = "";
+    $fromName = "";
 
     $mail = new PHPMailer;
 
@@ -94,8 +94,8 @@ function sendMailToUser($screen_name, $email)
     $mail->SMTPAuth = true; //Sets SMTP authentication. Utilizes the Username and Password variables
     // $mail->Username = "devangjariwala25@gmail.com";
     // $mail->Password = "Devang@4128";
-    $mail->Username = 'AKIA347SSPVUQUP2NZX2'; //Sets SMTP username
-    $mail->Password = 'BBFaKRlHifYVUDtPoF8HfeWPAUea0Q75LzdlaF4F4Pjc'; //Sets SMTP password
+    $mail->Username = ''; //Sets SMTP username
+    $mail->Password = ''; //Sets SMTP password
     $mail->Port = 587;
     $mail->SMTPSecure = "tls";
     $mail->setFrom($fromEmail, $fromName);
